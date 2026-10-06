@@ -13,6 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    setError("");
     try {
       const res = await axios.post(
         BASE_URL+"/login",
