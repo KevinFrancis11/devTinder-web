@@ -46,6 +46,7 @@ const EditProfile = (user) => {
     notify();
   };
 
+  
   const notify = () => toast("Profile Updated");
 
   return (
@@ -87,7 +88,7 @@ const EditProfile = (user) => {
               </fieldset>
 
               <fieldset className="fieldset my-3">
-                <legend className="fieldset-legend">Gender</legend>
+                <legend className="fieldset-legend">Gender:</legend>
                 <select
                   value={gender}
                   className="select select-primary"
@@ -96,16 +97,16 @@ const EditProfile = (user) => {
                   <option value="" disabled>
                     Select gender
                   </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Others">Others</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
                 </select>
               </fieldset>
 
               <fieldset className="fieldset my-3">
                 <legend className="fieldset-legend">About</legend>
                 <textarea
-                  value={about} 
+                  value={about}
                   className="textarea textarea-primary h-24 w-full resize-none"
                   placeholder="tell us about yourself"
                   maxLength={300}

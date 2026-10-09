@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { removeFeed } from "../utils/feedSlice";
+import { removeConnections } from "../utils/connectionSlice";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user); //here we are subscribing to the store to access the data stored in the store
@@ -16,6 +17,7 @@ const NavBar = () => {
       await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       dispatch(removeFeed());
+      dispatch(removeConnections());
       return navigate("/login");
     } catch (err) {
       console.log(err.message);
@@ -45,7 +47,7 @@ const NavBar = () => {
               </div>
               <ul
                 tabIndex={-1}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content bg-base-300 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
                   <Link to="/profile" className="justify-between">
@@ -53,7 +55,7 @@ const NavBar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to="/connections">Connections</Link>
                 </li>
                 <li>
                   <a onClick={handleLogOut}>Logout</a>
