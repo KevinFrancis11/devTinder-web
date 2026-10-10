@@ -33,13 +33,13 @@ const Connections = () => {
     <div className="my-10">
       <h1 className=" text-center text-2xl font-bold mb-20">Connections</h1>
       {connections.map((connection) => {
-        const { firstName, secondName, age, about, photoURL, gender } =
+        const { _id, firstName, secondName, age, about, photoURL, gender } =
           connection;
         const fullName = [firstName, secondName].filter(Boolean).join(" ");
         const ageAndGender = [age, gender].filter(Boolean).join(", ");
 
         return (
-          <ul className="list bg-base-300 rounded-box shadow-md mb-10 w-1/2 mx-auto">
+          <ul key={_id} className="list bg-base-300 rounded-box shadow-md mb-10 w-1/2 mx-auto">
             <li className="list-row">
               <div className="self-center">
                 <img
