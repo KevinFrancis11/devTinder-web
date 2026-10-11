@@ -2,19 +2,37 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequest } from "../utils/requestSlice";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.request);
+  const reviewRequest = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      dispatch(removeRequest(_id));
+    } catch (err) {
+      console.log(err.message.status);
+    }
+  };
+
   const fetchRequests = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/requests/recieved", {
         withCredentials: true,
       });
-      dispatch(addRequest(res?.data?.connectionRequests));
+      dispatch(addRequest(res?.data?.connectionRequests || []));
     } catch (err) {
-      console.log(err.message);
+      if (err.response?.status === 404) {
+        //No connection requests found
+        dispatch(addRequest([]));
+      } else {
+        console.log("Error fetching requests: ", err.message);
+      }
     }
   };
 
@@ -24,7 +42,12 @@ const Requests = () => {
 
   if (!requests) return;
 
-  if (requests.length === 0) return <h1>No Connection Requests found!!!</h1>;
+  if (requests.length === 0)
+    return (
+      <h1 className="flex justify-center my-10">
+        No Connection Requests found!!!
+      </h1>
+    );
 
   return (
     <div className="my-10">
@@ -60,13 +83,23 @@ const Requests = () => {
                   className="tooltip tooltip-left tooltip-error custom-tooltip"
                   data-tip="Reject"
                 >
-                  <button className="btn btn-primary">❌</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => reviewRequest("rejected", request._id)}
+                  >
+                    ❌
+                  </button>
                 </div>
                 <div
                   className="tooltip tooltip-right tooltip-success custom-tooltip"
                   data-tip="Accept"
                 >
-                  <button className="btn btn-primary">💚</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => reviewRequest("accepted", request._id)}
+                  >
+                    💚
+                  </button>
                 </div>
               </div>
             </li>
