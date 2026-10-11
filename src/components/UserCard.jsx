@@ -1,10 +1,31 @@
+import axios from "axios";
 import React from "react";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user }) => {
-  const { firstName, secondName, age, skills, photoURL, gender, about } = user;
+  const { _id, firstName, secondName, age, skills, photoURL, gender, about } =
+    user;
   const fullName = [firstName, secondName].filter(Boolean).join(" ");
   const ageAndGender = [age, gender].filter(Boolean).join(", ");
   const skill = skills?.map((s) => s.toUpperCase()).join(", ") ?? " ";
+  const dipatch = useDispatch();
+
+  const handleSendRequest = async (status, _id) => {
+    try {
+      await axios.post(
+        BASE_URL + "/request/send/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      dipatch(removeUserFromFeed(_id));
+    } catch (err) {
+      if (err.response?.message) {
+      }
+    }
+  };
+
   return (
     <div className="card bg-base-300 w-96 shadow-sm">
       <figure>
@@ -20,11 +41,27 @@ const UserCard = ({ user }) => {
         <p>{about}</p>
         <p>Interests: {skill}</p>
         <div className="card-actions justify-center my-4 gap-8">
-          <div className="tooltip tooltip-left tooltip-error custom-tooltip" data-tip="Ignore">
-            <button className="btn btn-primary">❌</button>
+          <div
+            className="tooltip tooltip-left tooltip-error custom-tooltip"
+            data-tip="Ignore"
+          >
+            <button
+              className="btn btn-primary"
+              onClick={() => handleSendRequest("ignored", _id)}
+            >
+              ❌
+            </button>
           </div>
-          <div className="tooltip tooltip-right tooltip-success custom-tooltip" data-tip="Interested">
-            <button className="btn btn-primary">💚</button>
+          <div
+            className="tooltip tooltip-right tooltip-success custom-tooltip"
+            data-tip="Interested"
+          >
+            <button
+              className="btn btn-primary"
+              onClick={() => handleSendRequest("interested", _id)}
+            >
+              💚
+            </button>
           </div>
         </div>
       </div>
