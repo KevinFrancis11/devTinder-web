@@ -18,7 +18,7 @@ const NavBar = () => {
       dispatch(removeUser());
       dispatch(removeFeed());
       dispatch(removeConnections());
-      return navigate("/login");
+      return navigate("/login", {replace: true});
     } catch (err) {
       console.log(err.message);
     }

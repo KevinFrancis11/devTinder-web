@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import UserCard from "./UserCard";
-import { generatePath } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { addFeed } from "../utils/feedSlice";
+import { addUser } from "../utils/userSlice";
 
 const EditProfile = (user) => {
   const [firstName, setFirstName] = useState(user?.user?.firstName);
   const [secondName, setSecondName] = useState(user?.user?.secondName);
-  const [photoURL, setPhotoURL] = useState(user?.user?.photoURL);
-  const [age, setAge] = useState(user?.user?.age);
-  const [about, setAbout] = useState(user?.user?.about);
-  const [gender, setGender] = useState(user?.user?.gender);
+  const [photoURL, setPhotoURL] = useState(user?.user?.photoURL || "");
+  const [age, setAge] = useState(user?.user?.age || "");
+  const [about, setAbout] = useState(user?.user?.about || "");
+  const [gender, setGender] = useState(user?.user?.gender || "");
   const [error, setError] = useState(" ");
   const dispatch = useDispatch();
 
@@ -34,10 +33,10 @@ const EditProfile = (user) => {
         { withCredentials: true },
       );
 
-      dispatch(addFeed(res?.data?.data));
+      dispatch(addUser(res?.data?.data));
     } catch (err) {
       setError(err?.response?.data || "Something went wrong!!!");
-      console.log(err?.response?.data);
+      console.log(err);
     }
   };
 
